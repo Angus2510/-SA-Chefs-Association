@@ -5,6 +5,15 @@ import ProfileCardDemo from "@/components/profile-card-demo";
 export default function Home() {
   return (
     <div className="bg-[#1b2942]">
+      <div className="mt-12">
+        <Image
+          src="/SA-chefs-logo-white.png"
+          alt="Logo"
+          width={200}
+          height={200}
+          className="mx-auto my-4"
+        />
+      </div>
       <Image
         src="/SA-chefs-logo-white.png"
         alt="Logo"
@@ -13,7 +22,7 @@ export default function Home() {
         className="mx-auto my-4"
       />
       <h1 className="text-5xl font-bold text-center my-8 text-white">
-        SA Chefs Association - Board of Directors 2023-2025 Voting Form
+        SA Chefs Association - Board of Directors 2025-2027 Voting Form
       </h1>
       <div className="max-w-4xl mx-auto px-4 mb-8  text-white">
         <div className=" rounded-xl p-6 shadow-lg">
