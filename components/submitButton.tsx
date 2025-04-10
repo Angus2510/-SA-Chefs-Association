@@ -14,6 +14,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
+const candidates = [
+  { id: "1", name: "Alex Johnson" },
+  { id: "2", name: "Sam Rivera" },
+  { id: "3", name: "Taylor Kim" },
+  // Add all other candidates here
+];
+
 interface SubmitVoteButtonProps {
   selectedVotes: string[];
   membershipDetails: {
@@ -32,6 +39,12 @@ export function SubmitVoteButton({
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const getSelectedCandidateNames = () => {
+    return selectedVotes
+      .map((id) => candidates.find((c) => c.id === id)?.name)
+      .filter(Boolean);
+  };
 
   const validateForm = () => {
     const errors = [];
@@ -92,10 +105,10 @@ export function SubmitVoteButton({
       const submission = {
         membershipDetails,
         selectedVotes,
+        selectedCandidates: getSelectedCandidateNames(),
         submittedAt: new Date().toISOString(),
       };
 
-      // TODO: Replace with your actual API endpoint
       const response = await fetch("/api/submit-vote", {
         method: "POST",
         headers: {
@@ -110,9 +123,6 @@ export function SubmitVoteButton({
 
       toast.success("Your vote has been successfully submitted!");
       setShowConfirmDialog(false);
-
-      // Optional: Redirect to a success page
-      // router.push('/thank-you');
     } catch (error) {
       toast.error("There was an error submitting your vote. Please try again.");
       console.error("Submit error:", error);
@@ -162,6 +172,17 @@ export function SubmitVoteButton({
               <p>
                 <strong>Number of votes:</strong> {selectedVotes.length}
               </p>
+
+              <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+                <strong>Selected Candidates:</strong>
+                <ul className="mt-2 list-disc pl-4">
+                  {getSelectedCandidateNames().map((name, index) => (
+                    <li key={index} className="text-sm text-gray-700">
+                      {name}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
 
             <div className="flex items-center space-x-2">
