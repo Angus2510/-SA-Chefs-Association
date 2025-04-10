@@ -1,26 +1,20 @@
 import Image from "next/image";
 import MembershipForm from "@/components/membership-form";
 import ProfileCardDemo from "@/components/profile-card-demo";
+import TermsDialog from "@/components/terms-dialog";
 
 export default function Home() {
   return (
     <div className="bg-[#1b2942]">
-      <div className="mt-12">
-        <Image
-          src="/SA-chefs-logo-white.png"
-          alt="Logo"
-          width={200}
-          height={200}
-          className="mx-auto my-4"
-        />
-      </div>
+      <TermsDialog />
       <Image
         src="/SA-chefs-logo-white.png"
         alt="Logo"
         width={200}
         height={200}
-        className="mx-auto my-4"
+        className="mx-auto  "
       />
+
       <h1 className="text-5xl font-bold text-center my-8 text-white">
         SA Chefs Association - Board of Directors 2025-2027 Voting Form
       </h1>
