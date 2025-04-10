@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Card,
   CardContent,
@@ -24,11 +25,28 @@ export default function MembershipForm({
   membershipDetails,
   setMembershipDetails,
 }: MembershipFormProps) {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
   const handleChange = (field: string, value: string) => {
     setMembershipDetails((prev: any) => ({
       ...prev,
       [field]: value,
     }));
+    // Clear error when field is changed
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: "" }));
+    }
+  };
+
+  const validateField = (field: string, value: string) => {
+    if (!value.trim()) {
+      setErrors((prev) => ({ ...prev, [field]: "This field is required" }));
+    } else if (field === "email" && !/^\S+@\S+\.\S+$/.test(value)) {
+      setErrors((prev) => ({
+        ...prev,
+        [field]: "Please enter a valid email address",
+      }));
+    }
   };
 
   return (
@@ -36,37 +54,55 @@ export default function MembershipForm({
       <CardHeader>
         <CardTitle>Voting Registration</CardTitle>
         <CardDescription>
-          Please fill in your membership details below.
+          Please fill in your membership details below. All fields are required.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="name">Full Name</Label>
+          <Label htmlFor="name" className="flex items-center">
+            Name and Surname <span className="text-red-500 ml-1">*</span>
+          </Label>
           <Input
             id="name"
             placeholder="Enter your full name"
             value={membershipDetails.name}
             onChange={(e) => handleChange("name", e.target.value)}
+            onBlur={(e) => validateField("name", e.target.value)}
+            className={errors.name ? "border-red-500" : ""}
             required
           />
+          {errors.name && <p className="text-xs text-red-500">{errors.name}</p>}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="membershipNumber">ID / Membership Number</Label>
+          <Label htmlFor="membershipNumber" className="flex items-center">
+            ID / Membership Number <span className="text-red-500 ml-1">*</span>
+          </Label>
           <Input
             id="membershipNumber"
             placeholder="Enter your ID or membership number"
             value={membershipDetails.membershipNumber}
             onChange={(e) => handleChange("membershipNumber", e.target.value)}
+            onBlur={(e) => validateField("membershipNumber", e.target.value)}
+            className={errors.membershipNumber ? "border-red-500" : ""}
             required
           />
+          {errors.membershipNumber && (
+            <p className="text-xs text-red-500">{errors.membershipNumber}</p>
+          )}
         </div>
 
         <div className="space-y-2">
-          <Label>Membership Category</Label>
+          <Label className="flex items-center">
+            Membership Category <span className="text-red-500 ml-1">*</span>
+          </Label>
           <RadioGroup
             value={membershipDetails.membershipCategory}
             onValueChange={(value) => handleChange("membershipCategory", value)}
+            className={
+              errors.membershipCategory ? "border-red-500 rounded-md p-2" : ""
+            }
+            required
           >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="professional" id="professional" />
@@ -83,25 +119,39 @@ export default function MembershipForm({
               <Label htmlFor="intermediate">Intermediate Member</Label>
             </div>
           </RadioGroup>
+          {errors.membershipCategory && (
+            <p className="text-xs text-red-500">{errors.membershipCategory}</p>
+          )}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email Address</Label>
+          <Label htmlFor="email" className="flex items-center">
+            Email Address <span className="text-red-500 ml-1">*</span>
+          </Label>
           <Input
             id="email"
             type="email"
             placeholder="Enter your email address"
             value={membershipDetails.email}
             onChange={(e) => handleChange("email", e.target.value)}
+            onBlur={(e) => validateField("email", e.target.value)}
+            className={errors.email ? "border-red-500" : ""}
             required
           />
+          {errors.email && (
+            <p className="text-xs text-red-500">{errors.email}</p>
+          )}
         </div>
 
         <div className="space-y-2">
-          <Label>Region</Label>
+          <Label className="flex items-center">
+            Region <span className="text-red-500 ml-1">*</span>
+          </Label>
           <RadioGroup
             value={membershipDetails.region}
             onValueChange={(value) => handleChange("region", value)}
+            className={errors.region ? "border-red-500 rounded-md p-2" : ""}
+            required
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div className="flex items-center space-x-2">
@@ -146,6 +196,9 @@ export default function MembershipForm({
               </div>
             </div>
           </RadioGroup>
+          {errors.region && (
+            <p className="text-xs text-red-500">{errors.region}</p>
+          )}
         </div>
       </CardContent>
     </Card>
