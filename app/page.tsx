@@ -1,25 +1,54 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 import MembershipForm from "@/components/membership-form";
 import ProfileCardDemo from "@/components/profile-card-demo";
 import TermsDialog from "@/components/terms-dialog";
+import { SubmitVoteButton } from "@/components/submitButton";
+
+interface MembershipDetails {
+  name: string;
+  membershipNumber: string;
+  membershipCategory: string;
+  email: string;
+  region: string;
+}
 
 export default function Home() {
-  return (
-    <div className="bg-[#1b2942]">
-      <TermsDialog />
-      <Image
-        src="/SA-chefs-logo-white.png"
-        alt="Logo"
-        width={200}
-        height={200}
-        className="mx-auto  "
-      />
+  const [selectedVotes, setSelectedVotes] = useState<string[]>([]);
+  const [membershipDetails, setMembershipDetails] = useState<MembershipDetails>(
+    {
+      name: "",
+      membershipNumber: "",
+      membershipCategory: "professional",
+      email: "",
+      region: "gauteng",
+    }
+  );
 
-      <h1 className="text-5xl font-bold text-center my-8 text-white">
-        SA Chefs Association - Board of Directors 2025-2027 Voting Form
-      </h1>
-      <div className="max-w-4xl mx-auto px-4 mb-8  text-white">
-        <div className=" rounded-xl p-6 shadow-lg">
+  return (
+    <div className="min-h-screen bg-[#1b2942] pb-12">
+      <TermsDialog />
+
+      {/* Header */}
+      <header className="py-8">
+        <Image
+          src="/SA-chefs-logo-white.png"
+          alt="SA Chefs Association Logo"
+          width={200}
+          height={200}
+          className="mx-auto"
+          priority
+        />
+        <h1 className="text-4xl md:text-5xl font-bold text-center my-8 text-white px-4">
+          SA Chefs Association - Board of Directors 2025-2027 Voting Form
+        </h1>
+      </header>
+
+      {/* Voting Rules Section */}
+      <section className="max-w-4xl mx-auto px-4 mb-8 text-white">
+        <div className="rounded-xl p-6 shadow-lg bg-white/5">
           <h2 className="text-xl font-bold mb-4">
             As per the rules of the Association:
           </h2>
@@ -99,18 +128,45 @@ export default function Home() {
             </div>
           </div>
 
-          <p className="mt-6 text-lg font-bold">
+          <p className="mt-6 text-lg font-bold text-amber-400">
             Voting is open from 2 March until 15 March - No votes will be
             counted after the closing date
           </p>
         </div>
-      </div>
-      <MembershipForm />
-      <h3 className="text-3xl font-bold text-center my-8 text-white">
-        Mark your Vote for the Candidates of your Choice. (you may select a
-        minimum of 2 and up to a maximum of 8 candidates)
-      </h3>
-      <ProfileCardDemo />
+      </section>
+
+      {/* Membership Form Section */}
+      <section className="mb-12">
+        <MembershipForm
+          membershipDetails={membershipDetails}
+          setMembershipDetails={setMembershipDetails}
+        />
+      </section>
+
+      {/* Voting Section */}
+      <section className="mb-12">
+        <h3 className="text-2xl md:text-3xl font-bold text-center my-8 text-white px-4">
+          Mark your Vote for the Candidates of your Choice
+          <span className="block text-lg text-gray-300 mt-2">
+            (Select a minimum of 2 and up to a maximum of 8 candidates)
+          </span>
+        </h3>
+
+        <ProfileCardDemo
+          selectedVotes={selectedVotes}
+          setSelectedVotes={setSelectedVotes}
+        />
+      </section>
+
+      {/* Submit Button Section */}
+      <section className="max-w-4xl mx-auto px-4">
+        <div className="w-full flex justify-center">
+          <SubmitVoteButton
+            selectedVotes={selectedVotes}
+            membershipDetails={membershipDetails}
+          />
+        </div>
+      </section>
     </div>
   );
 }

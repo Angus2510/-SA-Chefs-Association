@@ -1,9 +1,7 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -11,7 +9,28 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-export default function MembershipForm() {
+interface MembershipFormProps {
+  membershipDetails: {
+    name: string;
+    membershipNumber: string;
+    membershipCategory: string;
+    email: string;
+    region: string;
+  };
+  setMembershipDetails: (details: any) => void;
+}
+
+export default function MembershipForm({
+  membershipDetails,
+  setMembershipDetails,
+}: MembershipFormProps) {
+  const handleChange = (field: string, value: string) => {
+    setMembershipDetails((prev: any) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
@@ -23,7 +42,13 @@ export default function MembershipForm() {
       <CardContent className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="name">Full Name</Label>
-          <Input id="name" placeholder="Enter your full name" />
+          <Input
+            id="name"
+            placeholder="Enter your full name"
+            value={membershipDetails.name}
+            onChange={(e) => handleChange("name", e.target.value)}
+            required
+          />
         </div>
 
         <div className="space-y-2">
@@ -31,12 +56,18 @@ export default function MembershipForm() {
           <Input
             id="membershipNumber"
             placeholder="Enter your ID or membership number"
+            value={membershipDetails.membershipNumber}
+            onChange={(e) => handleChange("membershipNumber", e.target.value)}
+            required
           />
         </div>
 
         <div className="space-y-2">
           <Label>Membership Category</Label>
-          <RadioGroup defaultValue="professional">
+          <RadioGroup
+            value={membershipDetails.membershipCategory}
+            onValueChange={(value) => handleChange("membershipCategory", value)}
+          >
             <div className="flex items-center space-x-2">
               <RadioGroupItem value="professional" id="professional" />
               <Label htmlFor="professional">Professional Member</Label>
@@ -60,12 +91,18 @@ export default function MembershipForm() {
             id="email"
             type="email"
             placeholder="Enter your email address"
+            value={membershipDetails.email}
+            onChange={(e) => handleChange("email", e.target.value)}
+            required
           />
         </div>
 
         <div className="space-y-2">
           <Label>Region</Label>
-          <RadioGroup defaultValue="gauteng">
+          <RadioGroup
+            value={membershipDetails.region}
+            onValueChange={(value) => handleChange("region", value)}
+          >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="eastern-cape" id="eastern-cape" />
@@ -111,9 +148,6 @@ export default function MembershipForm() {
           </RadioGroup>
         </div>
       </CardContent>
-      <CardFooter>
-        <Button className="w-full">Submit Registration</Button>
-      </CardFooter>
     </Card>
   );
 }
