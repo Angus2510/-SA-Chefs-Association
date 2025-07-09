@@ -4,7 +4,7 @@ import ProfileCard from "./profile-card";
 
 interface ProfileCardDemoProps {
   selectedVotes: string[];
-  setSelectedVotes: (votes: string[]) => void;
+  setSelectedVotes: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export default function ProfileCardDemo({
@@ -15,7 +15,7 @@ export default function ProfileCardDemo({
     setSelectedVotes((prev) => {
       // If already selected, remove the vote
       if (prev.includes(id)) {
-        return prev.filter((voteId) => voteId !== id);
+        return prev.filter((voteId: string) => voteId !== id);
       }
       // If not selected and less than 8 votes, add the vote
       if (prev.length < 8) {

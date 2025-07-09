@@ -13,6 +13,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { submitVote } from "@/utils/clientEmailService";
 
 const candidates = [
   { id: "1", name: "Alex Johnson" },
@@ -102,29 +103,25 @@ export function SubmitVoteButton({
     setIsSubmitting(true);
 
     try {
-      const submission = {
-        membershipDetails,
-        selectedVotes,
-        selectedCandidates: getSelectedCandidateNames(),
-        submittedAt: new Date().toISOString(),
-      };
+      const result = await submitVote(membershipDetails, selectedVotes);
 
-      const response = await fetch("/api/submit-vote", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(submission),
-      });
+      if (result.success) {
+        toast.success(
+          "Your vote has been successfully submitted! A confirmation email has been sent to you."
+        );
+        setShowConfirmDialog(false);
 
-      if (!response.ok) {
-        throw new Error("Failed to submit vote");
+        // Optionally reset form or redirect
+        // You could add additional success handling here
+      } else {
+        throw new Error(result.error || "Failed to submit vote");
       }
-
-      toast.success("Your vote has been successfully submitted!");
-      setShowConfirmDialog(false);
     } catch (error) {
-      toast.error("There was an error submitting your vote. Please try again.");
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "There was an error submitting your vote. Please try again.";
+      toast.error(errorMessage);
       console.error("Submit error:", error);
     } finally {
       setIsSubmitting(false);

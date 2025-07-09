@@ -1,0 +1,101 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// Main voting model to store member votes
+model Vote {
+  id                String   @id @default(cuid())
+  
+  // Member information
+  name              String
+  membershipNumber  String
+  membershipCategory String
+  email             String
+  region            String
+  
+  // Vote data
+  selectedVotes     String[] // Array of candidate IDs
+  
+  // Metadata
+  submittedAt       DateTime @default(now())
+  ipAddress         String?  // Optional: track IP for security
+  userAgent         String?  // Optional: track user agent
+  
+  // Email tracking
+  confirmationEmailSent Boolean @default(false)
+  emailMessageId        String?
+  
+  // Prevent duplicate votes by same email address
+  @@unique([email])
+  @@map("votes")
+}
+
+// Model to store candidate information
+model Candidate {
+  id          String @id @default(cuid())
+  name        String @unique
+  bio         String
+  imageUrl    String
+  position    Int    @default(0) // For ordering
+  isActive    Boolean @default(true)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("candidates")
+}
+
+// Model to track voting analytics
+model VoteAnalytics {
+  id                String   @id @default(cuid())
+  
+  // Vote counts per candidate
+  candidateId       String
+  candidateName     String
+  voteCount         Int      @default(0)
+  
+  // Regional breakdown
+  gautengVotes      Int      @default(0)
+  westernCapeVotes  Int      @default(0)
+  kznVotes          Int      @default(0)
+  easternCapeVotes  Int      @default(0)
+  freeStateVotes    Int      @default(0)
+  limpopoVotes      Int      @default(0)
+  mpumalangaVotes   Int      @default(0)
+  northWestVotes    Int      @default(0)
+  northernCapeVotes Int      @default(0)
+  
+  // Membership category breakdown
+  professionalVotes    Int      @default(0)
+  intermediateVotes    Int      @default(0)
+  foreignBasedVotes    Int      @default(0)
+  
+  lastUpdated       DateTime @default(now()) @updatedAt
+  
+  @@unique([candidateId])
+  @@map("vote_analytics")
+}
+
+// Model for admin users (password protection)
+model AdminUser {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String   // Hashed password
+  email     String   @unique
+  role      String   @default("admin")
+  isActive  Boolean  @default(true)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  @@map("admin_users")
+}

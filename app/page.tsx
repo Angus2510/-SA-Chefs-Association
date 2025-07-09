@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import Link from "next/link";
 import MembershipForm from "@/components/membership-form";
 import ProfileCardDemo from "@/components/profile-card-demo";
 import TermsDialog from "@/components/terms-dialog";
 import { SubmitVoteButton } from "@/components/submitButton";
+import { Button } from "@/components/ui/button";
 
 interface MembershipDetails {
   name: string;
@@ -32,7 +34,20 @@ export default function Home() {
       <TermsDialog />
 
       {/* Header */}
-      <header className="py-8">
+      <header className="py-8 relative">
+        {/* Discreet Admin Button */}
+        <div className="absolute top-4 right-4">
+          <Link href="/admin">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-white/60 hover:text-white hover:bg-white/10 text-xs"
+            >
+              Admin
+            </Button>
+          </Link>
+        </div>
+
         <Image
           src="/SA-chefs-logo-white.png"
           alt="SA Chefs Association Logo"
