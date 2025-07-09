@@ -44,7 +44,7 @@ export default function ProfileCardDemo({
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 [&>:last-child:nth-child(3n+1)]:col-start-2 [&>:last-child:nth-child(3n+1)]:lg:col-start-2">
         {candidates.map((candidate) => (
           <ProfileCard
             key={candidate.id}
