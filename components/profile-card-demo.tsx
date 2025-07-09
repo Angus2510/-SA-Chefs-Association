@@ -1,6 +1,7 @@
 "use client";
 
 import ProfileCard from "./profile-card";
+import { candidates } from "../data/candidates";
 
 interface ProfileCardDemoProps {
   selectedVotes: string[];
@@ -24,27 +25,6 @@ export default function ProfileCardDemo({
       return prev;
     });
   };
-
-  const candidates = [
-    {
-      id: "1",
-      name: "Alex Johnson",
-      bio: "Suzan is the principal of Limpopo Chefs Academy, located in Polokwane, South Africa. She has extensive experience in higher education, with skills in research, management, and teaching. In 2019, she became one of the first qualified artisan chefs, a milestone celebrated by the academy. Under her leadership, the academy has provided significant experience and exposure to its students, contributing to the culinary field in the region.",
-      imageUrl: "/chef-1.jpg",
-    },
-    {
-      id: "2",
-      name: "Sam Rivera",
-      bio: "John is the principal of Limpopo Chefs Academy, located in Polokwane, South Africa. He has extensive experience in higher education, with skills in research, management, and teaching. In 2019, he became one of the first qualified artisan chefs, a milestone celebrated by the academy. Under his leadership, the academy has provided significant experience and exposure to its students, contributing to the culinary field in the region.",
-      imageUrl: "/chef-2.jpg",
-    },
-    {
-      id: "3",
-      name: "Taylor Kim",
-      bio: "Healthcare professional with expertise in public health policy. Advocate for accessible healthcare and mental health services.",
-      imageUrl: "/chef-3.jpg",
-    },
-  ];
 
   return (
     <div className="flex flex-col items-center">
