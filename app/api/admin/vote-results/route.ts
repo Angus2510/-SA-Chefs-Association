@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+// Specify that this should run on Node.js runtime
+export const runtime = "nodejs";
+export const preferredRegion = "auto";
+
 // Candidate mapping - keep this in sync with profile-card-demo.tsx
 const candidateMap: { [key: string]: string } = {
   "1": "Alex Johnson",
@@ -29,8 +33,30 @@ export async function GET(request: Request) {
       );
     }
 
+    console.log("Fetching vote results...");
+
+    // Check environment variables
+    if (!process.env.DATABASE_URL) {
+      console.error("DATABASE_URL environment variable is not set");
+      throw new Error("Database configuration error");
+    }
+
+    // Test database connection first
+    try {
+      await prisma.$connect();
+      console.log("Database connected successfully");
+    } catch (dbError) {
+      console.error("Database connection failed:", dbError);
+      throw new Error(
+        `Database connection failed: ${
+          dbError instanceof Error ? dbError.message : "Unknown error"
+        }`
+      );
+    }
+
     // Get all votes count
     const totalVoters = await prisma.vote.count();
+    console.log("Total voters:", totalVoters);
 
     // Get all votes to analyze
     const allVotes = await prisma.vote.findMany({
@@ -40,6 +66,7 @@ export async function GET(request: Request) {
         membershipCategory: true,
       },
     });
+    console.log("Retrieved votes:", allVotes.length);
 
     const totalVotes = allVotes.reduce(
       (sum: number, vote: { selectedVotes: string[] }) =>
@@ -50,6 +77,8 @@ export async function GET(request: Request) {
     // Generate vote analytics from current votes
     const candidateStats = generateCandidateStats(allVotes);
 
+    console.log("Generated candidate stats:", candidateStats.length);
+
     return NextResponse.json({
       success: true,
       totalVoters,
@@ -59,9 +88,19 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error("Error fetching vote results:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to fetch vote results" },
+      {
+        success: false,
+        error: "Failed to fetch vote results",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
+  } finally {
+    try {
+      await prisma.$disconnect();
+    } catch (disconnectError) {
+      console.error("Error disconnecting from database:", disconnectError);
+    }
   }
 }
 

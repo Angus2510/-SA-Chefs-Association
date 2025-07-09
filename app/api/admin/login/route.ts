@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 
+// Specify that this should run on Node.js runtime
+export const runtime = "nodejs";
+export const preferredRegion = "auto";
+
 export async function POST(request: Request) {
   try {
     const { password } = await request.json();
