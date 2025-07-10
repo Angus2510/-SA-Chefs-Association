@@ -184,7 +184,7 @@ export async function POST(request: Request) {
       voteData.selectedVotes.length > 8
     ) {
       return NextResponse.json(
-        { success: false, error: "Please select between 2 and 8 candidates" },
+        { success: false, error: "Please select between 2 and 6 candidates" },
         { status: 400 }
       );
     }

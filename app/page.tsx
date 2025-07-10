@@ -143,8 +143,22 @@ export default function Home() {
             </div>
           </div>
 
+          <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg">
+            <p className="text-lg font-bold text-amber-400 mb-2">
+              Election Information:
+            </p>
+            <p className="text-white mb-2">
+              • <strong>6 seats</strong> are up for election on the Board of
+              Directors
+            </p>
+            <p className="text-white mb-4">
+              • Each member may cast up to <strong>6 votes</strong> (minimum 2
+              votes required)
+            </p>
+          </div>
+
           <p className="mt-6 text-lg font-bold text-amber-400">
-            Voting is open from 2 March until 15 March - No votes will be
+            Voting is open from 10/07/25 until 26/07/25 - No votes will be
             counted after the closing date
           </p>
         </div>
@@ -163,7 +177,7 @@ export default function Home() {
         <h3 className="text-2xl md:text-3xl font-bold text-center my-8 text-white px-4">
           Mark your Vote for the Candidates of your Choice
           <span className="block text-lg text-gray-300 mt-2">
-            (Select a minimum of 2 and up to a maximum of 8 candidates)
+            (Select a minimum of 2 and up to 6 candidates)
           </span>
         </h3>
 

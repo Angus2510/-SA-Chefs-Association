@@ -6,7 +6,7 @@ This voting system collects votes for the SA Chefs Association Board of Director
 
 ## Features
 
-- ✅ Vote collection with validation (2-8 candidates)
+- ✅ Vote collection with validation (2-6 candidates)
 - ✅ Database storage with Prisma + Supabase
 - ✅ Duplicate vote prevention by email address
 - ✅ Automatic confirmation emails to voters
@@ -69,7 +69,7 @@ Handles vote submissions, saves to database, and sends confirmation emails.
 
 **Features:**
 
-- Validates vote count (2-8 candidates)
+- Validates vote count (2-6 candidates)
 - Prevents duplicate votes by email address
 - Saves to database with analytics
 - Sends confirmation email to voter
@@ -176,7 +176,7 @@ Access the admin panel at `/admin`:
 
 The system validates:
 
-- **Vote Count**: Minimum 2, maximum 8 candidates
+- **Vote Count**: Minimum 2, maximum 6 candidates
 - **Required Fields**: Name, membership number, email
 - **Email Format**: Valid email address format
 - **Duplicate Votes**: Prevents same email address voting twice

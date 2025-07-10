@@ -18,8 +18,8 @@ export default function ProfileCardDemo({
       if (prev.includes(id)) {
         return prev.filter((voteId: string) => voteId !== id);
       }
-      // If not selected and less than 8 votes, add the vote
-      if (prev.length < 8) {
+      // If not selected and less than 6 votes, add the vote
+      if (prev.length < 6) {
         return [...prev, id];
       }
       return prev;
@@ -30,13 +30,13 @@ export default function ProfileCardDemo({
     <div className="flex flex-col items-center">
       <div className="w-full max-w-4xl mb-6 p-4 bg-white/10 rounded-lg">
         <p className="text-white text-center">
-          Votes Selected: {selectedVotes.length} / 8
+          Votes Selected: {selectedVotes.length} / 6
           {selectedVotes.length < 2 && (
             <span className="text-red-400 ml-2">
               (Minimum 2 votes required)
             </span>
           )}
-          {selectedVotes.length === 8 && (
+          {selectedVotes.length === 6 && (
             <span className="text-yellow-400 ml-2">
               (Maximum votes reached)
             </span>

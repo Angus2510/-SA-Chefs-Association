@@ -76,8 +76,8 @@ export function SubmitVoteButton({
       errors.push("Please select at least 2 candidates");
     }
 
-    if (selectedVotes.length > 8) {
-      errors.push("You cannot select more than 8 candidates");
+    if (selectedVotes.length > 6) {
+      errors.push("You cannot select more than 6 candidates");
     }
 
     if (errors.length > 0) {
