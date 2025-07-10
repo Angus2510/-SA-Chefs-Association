@@ -56,7 +56,7 @@ export default function Home() {
           className="mx-auto"
           priority
         />
-        <h1 className="text-4xl md:text-5xl font-bold text-center my-8 text-white px-4">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-center my-8 text-white px-4">
           SA Chefs Association - Board of Directors 2025-2027 Voting Form
         </h1>
       </header>
@@ -174,9 +174,9 @@ export default function Home() {
 
       {/* Voting Section */}
       <section className="mb-12">
-        <h3 className="text-2xl md:text-3xl font-bold text-center my-8 text-white px-4">
+        <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-center my-8 text-white px-4">
           Mark your Vote for the Candidates of your Choice
-          <span className="block text-lg text-gray-300 mt-2">
+          <span className="block text-sm sm:text-lg text-gray-300 mt-2">
             (Select a minimum of 2 and up to 6 candidates)
           </span>
         </h3>

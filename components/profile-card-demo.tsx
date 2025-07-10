@@ -28,23 +28,23 @@ export default function ProfileCardDemo({
 
   return (
     <div className="flex flex-col items-center">
-      <div className="w-full max-w-4xl mb-6 p-4 bg-white/10 rounded-lg">
-        <p className="text-white text-center">
+      <div className="w-full max-w-4xl mb-6 p-3 sm:p-4 bg-white/10 rounded-lg mx-4 sm:mx-0">
+        <p className="text-white text-center text-sm sm:text-base">
           Votes Selected: {selectedVotes.length} / 6
           {selectedVotes.length < 2 && (
-            <span className="text-red-400 ml-2">
+            <span className="text-red-400 ml-2 block sm:inline">
               (Minimum 2 votes required)
             </span>
           )}
           {selectedVotes.length === 6 && (
-            <span className="text-yellow-400 ml-2">
+            <span className="text-yellow-400 ml-2 block sm:inline">
               (Maximum votes reached)
             </span>
           )}
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 [&>:last-child:nth-child(3n+1)]:col-start-2 [&>:last-child:nth-child(3n+1)]:lg:col-start-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 p-4 md:p-6 place-items-center [&>:last-child:nth-child(3n+1)]:xl:col-start-2">
         {candidates.map((candidate) => (
           <ProfileCard
             key={candidate.id}
