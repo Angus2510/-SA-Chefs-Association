@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { candidates } from "@/data/candidates";
 
 // Specify that this should run on Node.js runtime
 export const runtime = "nodejs";
 export const preferredRegion = "auto";
 
-// Candidate mapping - keep this in sync with profile-card-demo.tsx
-const candidateMap: { [key: string]: string } = {
-  "1": "Alex Johnson",
-  "2": "Sam Rivera",
-  "3": "Taylor Kim",
-};
+// Generate candidate mapping from the actual candidates data
+const candidateMap: { [key: string]: string } = candidates.reduce(
+  (map, candidate) => {
+    map[candidate.id] = candidate.name;
+    return map;
+  },
+  {} as { [key: string]: string }
+);
 
 // Helper function to check admin authentication
 function isAuthenticated(request: Request): boolean {

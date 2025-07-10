@@ -14,13 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { submitVote } from "@/utils/clientEmailService";
-
-const candidates = [
-  { id: "1", name: "Alex Johnson" },
-  { id: "2", name: "Sam Rivera" },
-  { id: "3", name: "Taylor Kim" },
-  // Add all other candidates here
-];
+import { candidates } from "@/data/candidates";
 
 interface SubmitVoteButtonProps {
   selectedVotes: string[];
