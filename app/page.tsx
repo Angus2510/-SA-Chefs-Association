@@ -77,10 +77,10 @@ export default function Home() {
 
           <h3 className="font-bold mt-4 mb-2">2.2.1 Voting Members</h3>
           <p className="mb-4">
-            The following shall form part of the Voting Members class and shall
-            be designated by the name below, without creating a separate class
-            in each instance. Members below in good standing* shall have full
-            voting rights.
+            The following shall form part of the Voting Members categories and
+            shall be designated by the name below, without creating a separate
+            class in each instance. Members below in good standing* shall have
+            full voting rights.
           </p>
 
           <div className="space-y-4">

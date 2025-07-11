@@ -101,7 +101,19 @@ export function SubmitVoteButton({
 
       if (result.success) {
         toast.success(
-          "Your vote has been successfully submitted! A confirmation email has been sent to you."
+          "🎉 Vote Successfully Submitted! 🎉\n\nThank you for participating in the SA Chefs Association Board of Directors election. Your vote has been recorded and a confirmation email has been sent to you.",
+          {
+            duration: 8000,
+            style: {
+              background: "#10B981",
+              color: "white",
+              fontSize: "16px",
+              fontWeight: "bold",
+              padding: "20px",
+              borderRadius: "10px",
+              maxWidth: "500px",
+            },
+          }
         );
         setShowConfirmDialog(false);
 
