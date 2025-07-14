@@ -30,11 +30,11 @@ export function TermsDialog() {
           <ScrollArea className="h-[calc(70vh-120px)] sm:h-[calc(60vh-100px)] w-full rounded-md border">
             <div className="p-4 space-y-4">
               <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
-                Management Commitment: Limpopo Chefs Academy has created this
-                security & privacy policy in order to demonstrate and
-                communicate its commitment to conducting business in accordance
-                with the highest legal and ethical standards and appropriate
-                internal controls.
+                Management Commitment: South African Chefs Association has
+                created this security & privacy policy in order to demonstrate
+                and communicate its commitment to conducting business in
+                accordance with the highest legal and ethical standards and
+                appropriate internal controls.
               </p>
               <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
                 Service inquiries: Our site&apos;s request-for-more-information
@@ -47,11 +47,11 @@ export function TermsDialog() {
               </p>
               <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
                 No personal information will be disclosed to third parties
-                without the individual&apos;s permission. However, Limpopo Chefs
-                Academy may share personal information: with business partners;
-                when we are compelled to do so by law or in terms of a court
-                order; if it is in the public interest to do so; or if it is
-                necessary to protect our rights.
+                without the individual&apos;s permission. However, South African
+                Chefs Association may share personal information: with business
+                partners; when we are compelled to do so by law or in terms of a
+                court order; if it is in the public interest to do so; or if it
+                is necessary to protect our rights.
               </p>
               <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
                 Information Capturing: Our site does not currently capture
@@ -84,8 +84,7 @@ export function TermsDialog() {
                 information from our database, we will promptly take action to
                 comply with your written request for removal. We will also
                 process change requests through any of the following
-                communication channels: Sending email to
-                info@limpopochefs.co.za.
+                communication channels: Sending email to info@sachefs.co.za.
               </p>
               <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">
                 Right to amend this privacy and security statement: We reserve
