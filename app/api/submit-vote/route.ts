@@ -10,6 +10,7 @@ export const preferredRegion = "auto";
 interface VoteSubmission {
   membershipDetails: {
     name: string;
+    idNumber: string;
     membershipNumber: string;
     membershipCategory: string;
     email: string;
@@ -82,8 +83,9 @@ function generateVoteConfirmationEmail(voteData: VoteSubmission): string {
         <div class="vote-details">
           <h3>Your Voting Details:</h3>
           <p><strong>Name:</strong> ${membershipDetails.name}</p>
+          <p><strong>ID Number:</strong> ${membershipDetails.idNumber}</p>
           <p><strong>Membership Number:</strong> ${
-            membershipDetails.membershipNumber
+            membershipDetails.membershipNumber || "Not provided"
           }</p>
           <p><strong>Membership Category:</strong> ${
             membershipDetails.membershipCategory
@@ -143,8 +145,9 @@ function generateAdminNotificationEmail(voteData: VoteSubmission): string {
           <h3>Voter Information:</h3>
           <p><strong>Name:</strong> ${membershipDetails.name}</p>
           <p><strong>Email:</strong> ${membershipDetails.email}</p>
+          <p><strong>ID Number:</strong> ${membershipDetails.idNumber}</p>
           <p><strong>Membership Number:</strong> ${
-            membershipDetails.membershipNumber
+            membershipDetails.membershipNumber || "Not provided"
           }</p>
           <p><strong>Category:</strong> ${
             membershipDetails.membershipCategory
@@ -193,8 +196,9 @@ export async function POST(request: Request) {
     }
 
     // Validate required membership details
-    const { name, membershipNumber, email } = voteData.membershipDetails;
-    if (!name || !membershipNumber || !email) {
+    const { name, idNumber, membershipNumber, email } =
+      voteData.membershipDetails;
+    if (!name || !idNumber || !email) {
       return NextResponse.json(
         { success: false, error: "Missing required membership details" },
         { status: 400 }
@@ -207,11 +211,11 @@ export async function POST(request: Request) {
     }
 
     // Check if this email address has already voted
-    const existingVote = await prisma.vote.findUnique({
+    const existingVoteByEmail = await prisma.vote.findUnique({
       where: { email },
     });
 
-    if (existingVote) {
+    if (existingVoteByEmail) {
       return NextResponse.json(
         {
           success: false,
@@ -221,14 +225,33 @@ export async function POST(request: Request) {
       );
     }
 
+    // Check if this ID number has already voted
+    // We'll search in membershipNumber field for now since it contains ID numbers
+    const existingVoteByIdNumber = await prisma.vote.findFirst({
+      where: {
+        membershipNumber: idNumber,
+      },
+    });
+
+    if (existingVoteByIdNumber) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "This ID number has already submitted a vote",
+        },
+        { status: 409 }
+      );
+    }
+
     // Verify transporter connection
     await transporter.verify();
 
     // Save vote to database
+    // Store ID number in membershipNumber field for now to maintain compatibility
     const savedVote = await prisma.vote.create({
       data: {
         name,
-        membershipNumber,
+        membershipNumber: idNumber, // Store ID number here for uniqueness
         membershipCategory: voteData.membershipDetails.membershipCategory,
         email,
         region: voteData.membershipDetails.region,
@@ -252,24 +275,35 @@ export async function POST(request: Request) {
       html: generateVoteConfirmationEmail(voteData),
     };
 
-    // Send notification email to admin (if admin email is configured)
-    const adminEmail = process.env.ADMIN_EMAIL;
+    // Send notification email to admin(s) (if admin email is configured)
+    const adminEmails = process.env.ADMIN_EMAIL;
     let adminEmailSent = false;
 
-    if (adminEmail) {
-      const adminMailOptions = {
-        from: process.env.EMAIL_USER,
-        to: adminEmail,
-        subject: `New Vote Submitted - ${name} (${membershipNumber})`,
-        html: generateAdminNotificationEmail(voteData),
-      };
+    if (adminEmails) {
+      // Split by comma and trim whitespace to support multiple admin emails
+      const adminEmailList = adminEmails
+        .split(",")
+        .map((email) => email.trim())
+        .filter((email) => email);
 
-      try {
-        await transporter.sendMail(adminMailOptions);
-        adminEmailSent = true;
-      } catch (adminEmailError) {
-        console.error("Failed to send admin notification:", adminEmailError);
-        // Continue execution - voter confirmation is more important
+      for (const adminEmail of adminEmailList) {
+        const adminMailOptions = {
+          from: process.env.EMAIL_USER,
+          to: adminEmail,
+          subject: `New Vote Submitted - ${name} (ID: ${idNumber})`,
+          html: generateAdminNotificationEmail(voteData),
+        };
+
+        try {
+          await transporter.sendMail(adminMailOptions);
+          adminEmailSent = true;
+        } catch (adminEmailError) {
+          console.error(
+            `Failed to send admin notification to ${adminEmail}:`,
+            adminEmailError
+          );
+          // Continue execution - voter confirmation is more important
+        }
       }
     }
 
@@ -293,7 +327,9 @@ export async function POST(request: Request) {
 
     console.log("Vote recorded in database:", {
       id: savedVote.id,
-      voter: `${name} (${membershipNumber})`,
+      voter: `${name} (ID: ${idNumber})`,
+      membershipNumber: membershipNumber || "Not provided",
+      storedAs: "ID number stored in membershipNumber field",
       votes: voteData.selectedVotes.length,
       timestamp: voteData.timestamp,
     });

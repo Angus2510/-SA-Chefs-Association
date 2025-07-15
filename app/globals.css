@@ -120,3 +120,42 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom toast styles for centered success message */
+[data-sonner-toaster][data-theme] {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 10000 !important;
+  width: auto !important;
+  max-width: none !important;
+  inset: auto !important;
+}
+
+[data-sonner-toast] {
+  position: relative !important;
+  margin: 0 !important;
+  max-width: min(500px, 90vw) !important;
+  width: auto !important;
+}
+
+/* Mobile-friendly adjustments */
+@media (max-width: 640px) {
+  [data-sonner-toast] {
+    max-width: 95vw !important;
+    min-width: 280px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  [data-sonner-toast] {
+    max-width: 98vw !important;
+    min-width: 260px !important;
+  }
+}
+
+/* Ensure proper z-index */
+[data-sonner-toaster] {
+  z-index: 10000 !important;
+}

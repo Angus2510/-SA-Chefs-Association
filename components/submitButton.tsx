@@ -107,11 +107,16 @@ export function SubmitVoteButton({
             style: {
               background: "#10B981",
               color: "white",
-              fontSize: "16px",
+              fontSize: "clamp(14px, 4vw, 16px)",
               fontWeight: "bold",
-              padding: "20px",
-              borderRadius: "10px",
-              maxWidth: "500px",
+              padding: "clamp(18px, 5vw, 24px)",
+              borderRadius: "12px",
+              textAlign: "center",
+              lineHeight: "1.6",
+              boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)",
+              border: "none",
+              whiteSpace: "pre-line",
+              minWidth: "300px",
             },
           }
         );

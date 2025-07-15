@@ -17,7 +17,7 @@ model Vote {
   
   // Member information
   name              String
-  membershipNumber  String
+  membershipNumber  String?  // Stores ID numbers for new votes, membership numbers for old votes
   membershipCategory String
   email             String
   region            String

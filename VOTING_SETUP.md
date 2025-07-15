@@ -41,7 +41,7 @@ EMAIL_USER=your-email@gmail.com
 EMAIL_PASS=your-app-password
 
 # Admin Configuration
-ADMIN_EMAIL=admin@yourdomain.com
+ADMIN_EMAIL=admin@yourdomain.com,admin2@yourdomain.com
 ADMIN_PASSWORD=your-secure-admin-password
 ```
 
@@ -160,6 +160,7 @@ Access the admin panel at `/admin`:
 ### Admin Notification Email:
 
 - **Instant Alerts**: Immediate notification of new votes
+- **Multiple Recipients**: Supports multiple admin email addresses (comma-separated)
 - **Voter Summary**: Key information about the voter
 - **Vote Analysis**: Quick overview of selections made
 

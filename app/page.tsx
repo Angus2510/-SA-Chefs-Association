@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 
 interface MembershipDetails {
   name: string;
+  idNumber: string;
   membershipNumber: string;
   membershipCategory: string;
   email: string;
@@ -22,6 +23,7 @@ export default function Home() {
   const [membershipDetails, setMembershipDetails] = useState<MembershipDetails>(
     {
       name: "",
+      idNumber: "",
       membershipNumber: "",
       membershipCategory: "professional",
       email: "",

@@ -10,15 +10,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
+interface MembershipDetails {
+  name: string;
+  idNumber: string;
+  membershipNumber: string;
+  membershipCategory: string;
+  email: string;
+  region: string;
+}
+
 interface MembershipFormProps {
-  membershipDetails: {
-    name: string;
-    membershipNumber: string;
-    membershipCategory: string;
-    email: string;
-    region: string;
-  };
-  setMembershipDetails: (details: any) => void;
+  membershipDetails: MembershipDetails;
+  setMembershipDetails: (
+    details:
+      | MembershipDetails
+      | ((prev: MembershipDetails) => MembershipDetails)
+  ) => void;
 }
 
 export default function MembershipForm({
@@ -28,7 +35,7 @@ export default function MembershipForm({
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const handleChange = (field: string, value: string) => {
-    setMembershipDetails((prev: any) => ({
+    setMembershipDetails((prev: MembershipDetails) => ({
       ...prev,
       [field]: value,
     }));
@@ -75,17 +82,34 @@ export default function MembershipForm({
         </div>
 
         <div className="space-y-2">
+          <Label htmlFor="idNumber" className="flex items-center">
+            ID Number <span className="text-red-500 ml-1">*</span>
+          </Label>
+          <Input
+            id="idNumber"
+            placeholder="Enter your ID number"
+            value={membershipDetails.idNumber}
+            onChange={(e) => handleChange("idNumber", e.target.value)}
+            onBlur={(e) => validateField("idNumber", e.target.value)}
+            className={errors.idNumber ? "border-red-500" : ""}
+            required
+          />
+          {errors.idNumber && (
+            <p className="text-xs text-red-500">{errors.idNumber}</p>
+          )}
+        </div>
+
+        <div className="space-y-2">
           <Label htmlFor="membershipNumber" className="flex items-center">
-            ID / Membership Number <span className="text-red-500 ml-1">*</span>
+            Membership Number{" "}
+            <span className="text-gray-400 ml-1">(Optional)</span>
           </Label>
           <Input
             id="membershipNumber"
-            placeholder="Enter your ID or membership number"
+            placeholder="Enter your membership number (if applicable)"
             value={membershipDetails.membershipNumber}
             onChange={(e) => handleChange("membershipNumber", e.target.value)}
-            onBlur={(e) => validateField("membershipNumber", e.target.value)}
             className={errors.membershipNumber ? "border-red-500" : ""}
-            required
           />
           {errors.membershipNumber && (
             <p className="text-xs text-red-500">{errors.membershipNumber}</p>

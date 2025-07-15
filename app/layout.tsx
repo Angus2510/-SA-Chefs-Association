@@ -18,7 +18,20 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         {children}
-        <Toaster position="top-center" />
+        <Toaster
+          position="top-center"
+          expand={false}
+          richColors={true}
+          closeButton={true}
+          offset={0}
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 10000,
+          }}
+        />
       </body>
     </html>
   );

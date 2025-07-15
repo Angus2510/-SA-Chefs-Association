@@ -47,9 +47,11 @@ This guide will help you set up Prisma with Supabase for the SA Chefs Associatio
    EMAIL_PASS=your-app-password
 
    # Admin Configuration
-   ADMIN_EMAIL=admin@yourdomain.com
+   ADMIN_EMAIL=admin@yourdomain.com,admin2@yourdomain.com
    ADMIN_PASSWORD=your-secure-admin-password
    ```
+
+   **Note:** You can specify multiple admin email addresses by separating them with commas. All listed emails will receive notifications when new votes are submitted.
 
 ## Step 4: Run Database Migrations
 
