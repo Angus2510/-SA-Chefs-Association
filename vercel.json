@@ -3,5 +3,10 @@
     "env": {
       "GENERATE_SOURCEMAP": "false"
     }
+  },
+  "functions": {
+    "app/api/submit-vote/route.ts": {
+      "maxDuration": 30
+    }
   }
 }

@@ -31,6 +31,9 @@ const transporter = nodemailer.createTransport({
   tls: {
     rejectUnauthorized: false,
   },
+  connectionTimeout: 15000, // 15 seconds
+  greetingTimeout: 15000, // 15 seconds
+  socketTimeout: 15000, // 15 seconds
 });
 
 // Generate candidate mapping from the actual candidates data
@@ -174,10 +177,17 @@ function generateAdminNotificationEmail(voteData: VoteSubmission): string {
 
 export async function POST(request: Request) {
   try {
+    console.log("Starting vote submission process...");
+
     const voteData: VoteSubmission = await request.json();
+    console.log("Vote data received:", {
+      email: voteData.membershipDetails?.email,
+      votesCount: voteData.selectedVotes?.length,
+    });
 
     // Validate the vote data
     if (!voteData.membershipDetails || !voteData.selectedVotes) {
+      console.log("Missing required vote data");
       return NextResponse.json(
         { success: false, error: "Missing required vote data" },
         { status: 400 }
@@ -211,11 +221,13 @@ export async function POST(request: Request) {
     }
 
     // Check if this email address has already voted
+    console.log("Checking for existing vote by email...");
     const existingVoteByEmail = await prisma.vote.findUnique({
       where: { email },
     });
 
     if (existingVoteByEmail) {
+      console.log("Email already voted:", email);
       return NextResponse.json(
         {
           success: false,
@@ -227,6 +239,7 @@ export async function POST(request: Request) {
 
     // Check if this ID number has already voted
     // We'll search in membershipNumber field for now since it contains ID numbers
+    console.log("Checking for existing vote by ID number...");
     const existingVoteByIdNumber = await prisma.vote.findFirst({
       where: {
         membershipNumber: idNumber,
@@ -234,6 +247,7 @@ export async function POST(request: Request) {
     });
 
     if (existingVoteByIdNumber) {
+      console.log("ID number already voted:", idNumber);
       return NextResponse.json(
         {
           success: false,
@@ -244,10 +258,12 @@ export async function POST(request: Request) {
     }
 
     // Verify transporter connection
+    console.log("Verifying email transporter...");
     await transporter.verify();
 
     // Save vote to database
     // Store ID number in membershipNumber field for now to maintain compatibility
+    console.log("Saving vote to database...");
     const savedVote = await prisma.vote.create({
       data: {
         name,
@@ -265,6 +281,7 @@ export async function POST(request: Request) {
         userAgent: request.headers.get("user-agent") || "unknown",
       },
     });
+    console.log("Vote saved successfully:", savedVote.id);
 
     // Send confirmation email to voter
     const voterMailOptions = {
@@ -345,6 +362,16 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error processing vote:", error);
 
+    // Return more specific error information for debugging
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error occurred";
+
+    console.error("Error details:", {
+      message: errorMessage,
+      stack: error instanceof Error ? error.stack : "No stack trace available",
+      name: error instanceof Error ? error.name : "Unknown",
+    });
+
     // Check if this is a unique constraint violation (duplicate vote)
     if (error instanceof Error && error.message.includes("Unique constraint")) {
       return NextResponse.json(
@@ -356,10 +383,39 @@ export async function POST(request: Request) {
       );
     }
 
+    // Check for database connection errors
+    if (
+      error instanceof Error &&
+      (error.message.includes("connection") ||
+        error.message.includes("timeout"))
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Database connection error. Please try again in a moment.",
+        },
+        { status: 503 }
+      );
+    }
+
+    // Check for email sending errors
+    if (error instanceof Error && error.message.includes("SMTP")) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Email service temporarily unavailable. Please try again later.",
+        },
+        { status: 503 }
+      );
+    }
+
     return NextResponse.json(
       {
         success: false,
         error: "Failed to process vote submission. Please try again.",
+        details:
+          process.env.NODE_ENV === "development" ? errorMessage : undefined,
       },
       { status: 500 }
     );
