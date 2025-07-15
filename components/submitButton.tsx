@@ -48,8 +48,8 @@ export function SubmitVoteButton({
       errors.push("Full name is required");
     }
 
-    if (!membershipDetails.membershipNumber.trim()) {
-      errors.push("Membership number is required");
+    if (!membershipDetails.idNumber.trim()) {
+      errors.push("ID number is required");
     }
 
     if (!membershipDetails.email.trim()) {
